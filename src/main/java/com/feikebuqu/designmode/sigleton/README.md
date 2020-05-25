@@ -20,7 +20,7 @@ public class Singleton{
     
     public static Singleton getInstance(){
     //每次访问这个静态方法都会构造一个实例，这里的实现不是单例，非唯一
-        return  new Singleton();;
+        return  new Singleton();
     }
 }
 
@@ -49,9 +49,10 @@ public class Singleton{
     
     public static Singleton getInstance(){
         if (singleton == null){
-            singleton = new Singleton();}
+            singleton = new Singleton();
         }
         return singleton;
+        }
 }
 
 ```
@@ -71,21 +72,23 @@ public class Singleton{
 
         private Singleton(){ }
 
-        public static synchronized  Singleton getInstance(){
+        public static synchronized Singleton getInstance(){
             if (singleton == null){
-                singleton = new Singleton();}
+                singleton = new Singleton();
             }
+            
             return singleton;
+            }
     }
  ```
     2. 在方法上加锁的方法，虽然可以，但是还是会有问题，就是，我们要控制的其实就是第一次实例化的时候，保证只有一个线程进来就好，但是在方法商加锁，就相当于每次获得实例的时候，线程都需要排队拿锁，在已经实例化后这个其实是不必要的，如果你可以接受这个效率的降低，其实也可以，但是也可以改进,使用双重检查加锁，避免资源浪费也避免程序执行效率下降：
  ```java
 public class Singleton{
-        private  volatile static    Singleton singleton;
+        private  volatile static  Singleton singleton;
 
         private Singleton(){ }
 
-        public static   Singleton getInstance(){
+        public static  Singleton getInstance(){
             if (singleton == null){
                 synchronized(Singleton.class){
                     if (singleton == null){
@@ -93,9 +96,8 @@ public class Singleton{
                     }
                 }
             }
-               
-            }
-            return singleton;
+            return singleton; 
+        }
     }
 
 ```
